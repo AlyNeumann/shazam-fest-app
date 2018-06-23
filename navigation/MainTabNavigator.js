@@ -11,8 +11,12 @@ import Friday from '../screens/Friday';
 import Saturday from '../screens/Saturday';
 import Sunday from '../screens/Sunday';
 import Login from '../screens/Login'
+import GlobalChat from '../screens/GlobalChat';
+import RideShare from '../screens/RideShare';
+import Trade from '../screens/Trade';
 
 const HomeStack = createStackNavigator({
+  Login: Login,
   Home: HomeScreen,
 });
 
@@ -62,8 +66,10 @@ GalleryStack.navigationOptions = {
 };
 
 const ChatStack = createStackNavigator({
-  Login: Login,
   Chat: ChatScreen,
+  GlobalChat: GlobalChat,
+  RideShare: RideShare,
+  Trade: Trade
 })
 
 ChatStack.navigationOptions = {

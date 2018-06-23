@@ -5,10 +5,10 @@ export default class Login extends React.Component {
     render() {
         return (
             <View>
-                <TextInput placeholder="Login to Chat"/>
+                <TextInput placeholder="Enter your username..."/>
                 <Button
                     title="Login"
-                    onPress={() => this.props.navigation.navigate('Chat')}
+                    onPress={() => this.props.navigation.navigate('Home')}
                 />
             </View>)
     }
