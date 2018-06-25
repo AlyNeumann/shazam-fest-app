@@ -22,6 +22,9 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "facebookScheme": "fb463689234063252",
+    "facebookAppId": "463689234063252",
+    "facebookDisplayName": "ShazamFestApp"
   }
 }
