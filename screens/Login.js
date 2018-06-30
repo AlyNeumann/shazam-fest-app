@@ -1,9 +1,20 @@
 import React from 'react'
 import { View, Text, Button, Alert, Image } from 'react-native';
+import * as firebase from 'firebase'
+
+firebase.initializeApp({
+    apiKey: "AIzaSyDOQ2I8qS3WjiAL7X4nVdgHHK49SyItHMM",
+    authDomain: "shazam-46ae2.firebaseapp.com",
+    databaseURL: "https://shazam-46ae2.firebaseio.com",
+    projectId: "shazam-46ae2",
+    storageBucket: "shazam-46ae2.appspot.com",
+    messagingSenderId: "452468814819"
+  });
 
 export default class Login extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
+       
         this.state = {
             userInfo: null,
             error: '',
@@ -24,6 +35,12 @@ export default class Login extends React.Component {
                 'Logged in!',
                 `Hi ${userInfo.name}!`,
             );
+            const credential = firebase.auth.FacebookAuthProvider.credential(token);
+
+            // Sign in with credential from the Facebook user.
+            firebase.auth().signInAndRetrieveDataWithCredential(credential).catch((error) => {
+                console.log(error+ "firebase auth faiiiilllll")
+            });
         }
     }
     _renderUserInfo = () => {
@@ -45,7 +62,7 @@ export default class Login extends React.Component {
                     title="Skip login"
                     onPress={() => this.props.navigation.navigate('Home')}
                 /></View>) : (this._renderUserInfo())}
-                
+
             </View>)
     }
 }

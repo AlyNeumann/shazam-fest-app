@@ -1,11 +1,47 @@
 import React from 'react'
-import { View, Text } from 'react-native';
+import { GiftedChat } from 'react-native-gifted-chat';
+import Backend from './Backend';
 
-export default class GlobalChat extends React.Component{
-    render(){
-        return (
-        <View>
-            <Text>Shazam Chat</Text>
-        </View>)
+
+export default class GlobalChat extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            messages: [],
+            userInfo: null
+        };
     }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+          userInfo: nextProps.userInfo,
+        });
+    }
+    render() {
+        return (
+            <GiftedChat
+                messages={this.state.messages}
+                onSend={(message) => {
+                    Backend.sendMessage(message);
+                }}
+                user={{
+                    _id: this.state.userInfo.id,
+                    name: this.state.userInfo.name,
+                }}
+            />
+        );
+    }
+    componentDidMount() {
+        Backend.loadMessages((message) => {
+            this.setState((previousState) => {
+                return {
+                    messages: GiftedChat.append(previousState.messages, message),
+                };
+            });
+        });
+    }
+    componentWillUnmount() {
+        Backend.closeChat();
+    }
+ 
 }
