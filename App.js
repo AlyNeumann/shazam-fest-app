@@ -2,19 +2,15 @@ import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
-import Login from './screens/Login';
+
 
 export default class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
       isLoadingComplete: false,
-      userInfo: null
     };
   
-  }
-  _getUserInfo = (childProps) => {
-    this.setState({ userInfo: childProps});
   }
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {

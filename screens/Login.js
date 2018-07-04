@@ -2,25 +2,30 @@ import React from 'react'
 import { View, Text, Button, Alert, Image } from 'react-native';
 import * as firebase from 'firebase'
 import Expo from 'expo';
+// import Fire from './Fire';
 
-firebase.initializeApp({
-    apiKey: "AIzaSyDOQ2I8qS3WjiAL7X4nVdgHHK49SyItHMM",
-    authDomain: "shazam-46ae2.firebaseapp.com",
-    databaseURL: "https://shazam-46ae2.firebaseio.com",
-    projectId: "shazam-46ae2",
-    storageBucket: "shazam-46ae2.appspot.com",
-    messagingSenderId: "452468814819"
-});
+
+
 
 export default class Login extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
             error: '',
             loading: false,
             userGoogle: null
         }
+    }
+    componentWillMount() {
+        const config = {
+            apiKey: "AIzaSyDOQ2I8qS3WjiAL7X4nVdgHHK49SyItHMM",
+            authDomain: "shazam-46ae2.firebaseapp.com",
+            databaseURL: "https://shazam-46ae2.firebaseio.com",
+            projectId: "shazam-46ae2",
+            storageBucket: "shazam-46ae2.appspot.com",
+            messagingSenderId: "452468814819"
+        }
+        firebase.initializeApp(config)
     }
 
     async signInWithGoogleAsync() {
@@ -32,7 +37,7 @@ export default class Login extends React.Component {
             });
 
             if (result.type === 'success') {
-                const userGoogle = result 
+                const userGoogle = result
                 console.log(result)
                 const token = result.accessToken
                 this.setState({ userGoogle: userGoogle });
@@ -41,8 +46,6 @@ export default class Login extends React.Component {
                     'Logged in!',
                     `Hi ${userGoogle.user.name}!`, )
                 const credential = firebase.auth.GoogleAuthProvider.credential(null, token);
-
-                // Sign in with credential from the Facebook user.
                 firebase.auth().signInAndRetrieveDataWithCredential(credential).catch((error) => {
                     console.log(error + "firebase auth faiiiilllll")
                 });
@@ -57,21 +60,21 @@ export default class Login extends React.Component {
     }
 
     _renderUserInfo = () => {
-     
-            return (
-                <View style={{ alignItems: 'center' }}>
-                    <Image
-                        source={{ uri: this.state.userGoogle.user.photoUrl }}
-                        style={{ width: 100, height: 100, borderRadius: 50 }}
-                    />
-                    <Text style={{ fontSize: 20 }}>{this.state.userGoogle.user.name}</Text>
-                    <Button title='Continue'
+
+        return (
+            <View style={{ alignItems: 'center' }}>
+                <Image
+                    source={{ uri: this.state.userGoogle.user.photoUrl }}
+                    style={{ width: 100, height: 100, borderRadius: 50 }}
+                />
+                <Text style={{ fontSize: 20 }}>{this.state.userGoogle.user.name}</Text>
+                <Button title='Continue'
                     onPress={() => this.props.navigation.navigate('Home')}
-                    />
-                </View>
-            )
-        }
-    
+                />
+            </View>
+        )
+    }
+
 
     render() {
         return (

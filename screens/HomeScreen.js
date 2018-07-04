@@ -18,8 +18,6 @@ export default class HomeScreen extends React.Component {
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
         <Text>Welcome to Shazamfest!!!!</Text>
         <Text>In the tab bar below you will find the calender, photo gallery, and chat room!</Text>
-         
-
         </ScrollView>
       </View>
     );
