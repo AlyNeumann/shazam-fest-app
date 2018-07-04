@@ -3,7 +3,6 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  Button,
   View,
 } from 'react-native';
 
@@ -19,10 +18,7 @@ export default class HomeScreen extends React.Component {
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
         <Text>Welcome to Shazamfest!!!!</Text>
         <Text>In the tab bar below you will find the calender, photo gallery, and chat room!</Text>
-          <Button
-            title="Forgot to login?"
-            onPress={() => this.props.navigation.navigate('Login')}
-          />
+         
 
         </ScrollView>
       </View>

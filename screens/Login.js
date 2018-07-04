@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text, Button, Alert, Image } from 'react-native';
 import * as firebase from 'firebase'
+import Expo from 'expo';
 
 firebase.initializeApp({
     apiKey: "AIzaSyDOQ2I8qS3WjiAL7X4nVdgHHK49SyItHMM",
@@ -9,59 +10,74 @@ firebase.initializeApp({
     projectId: "shazam-46ae2",
     storageBucket: "shazam-46ae2.appspot.com",
     messagingSenderId: "452468814819"
-  });
+});
 
 export default class Login extends React.Component {
     constructor(props) {
         super(props);
-       
-        this.state = {
-            userInfo: null,
-            error: '',
-            loading: false
-        }
-    }
-    async logIn() {
-        const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync('463689234063252', {
-            permissions: ['public_profile'],
-        });
-        if (type === 'success') {
-            // Get the user's name using Facebook's Graph API
-            const response = await fetch(
-                `https://graph.facebook.com/me?access_token=${token}&fields=id,name,picture.type(large)`);
-            const userInfo = await response.json();
-            this.setState({ userInfo: userInfo });
-            Alert.alert(
-                'Logged in!',
-                `Hi ${userInfo.name}!`,
-            );
-            const credential = firebase.auth.FacebookAuthProvider.credential(token);
 
-            // Sign in with credential from the Facebook user.
-            firebase.auth().signInAndRetrieveDataWithCredential(credential).catch((error) => {
-                console.log(error+ "firebase auth faiiiilllll")
-            });
+        this.state = {
+            error: '',
+            loading: false,
+            userGoogle: null
         }
     }
-    _renderUserInfo = () => {
-        return (
-            <View style={{ alignItems: 'center' }}>
-                <Image
-                    source={{ uri: this.state.userInfo.picture.data.url }}
-                    style={{ width: 100, height: 100, borderRadius: 50 }}
-                />
-                <Text style={{ fontSize: 20 }}>{this.state.userInfo.name}</Text>
-                <Text>ID: {this.state.userInfo.id}</Text>
-            </View>
-        )
+
+    async signInWithGoogleAsync() {
+        try {
+            const result = await Expo.Google.logInAsync({
+                // androidClientId: YOUR_CLIENT_ID_HERE,
+                iosClientId: '452468814819-71t123irnhbhbv6gu3a4vcev19j2nbua.apps.googleusercontent.com',
+                scopes: ['profile', 'email'],
+            });
+
+            if (result.type === 'success') {
+                const userGoogle = result 
+                console.log(result)
+                const token = result.accessToken
+                this.setState({ userGoogle: userGoogle });
+                console.log(this.state.userGoogle)
+                Alert.alert(
+                    'Logged in!',
+                    `Hi ${userGoogle.user.name}!`, )
+                const credential = firebase.auth.GoogleAuthProvider.credential(null, token);
+
+                // Sign in with credential from the Facebook user.
+                firebase.auth().signInAndRetrieveDataWithCredential(credential).catch((error) => {
+                    console.log(error + "firebase auth faiiiilllll")
+                });
+
+                return result.accessToken;
+            } else {
+                return { cancelled: true };
+            }
+        } catch (e) {
+            return { error: true };
+        }
     }
+
+    _renderUserInfo = () => {
+     
+            return (
+                <View style={{ alignItems: 'center' }}>
+                    <Image
+                        source={{ uri: this.state.userGoogle.user.photoUrl }}
+                        style={{ width: 100, height: 100, borderRadius: 50 }}
+                    />
+                    <Text style={{ fontSize: 20 }}>{this.state.userGoogle.user.name}</Text>
+                    <Button title='Continue'
+                    onPress={() => this.props.navigation.navigate('Home')}
+                    />
+                </View>
+            )
+        }
+    
+
     render() {
         return (
             <View>
-                {!this.state.userInfo ? (<View><Button onPress={this.logIn.bind(this)} title='Login with Facebook to access chat and gallery!' /><Button
-                    title="Skip login"
-                    onPress={() => this.props.navigation.navigate('Home')}
-                /></View>) : (this._renderUserInfo())}
+                {!this.state.userGoogle ? (<View><Button onPress={this.signInWithGoogleAsync.bind(this)} title='Sign in with Google' />
+                </View>) : (this._renderUserInfo())}
 
             </View>)
     }
