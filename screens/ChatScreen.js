@@ -20,14 +20,14 @@ export default class ChatScreen extends React.Component {
         title="Shazam Chat"
         onPress={() => this.props.navigation.navigate('GlobalChat')}
         />
-        <Button
+        {/* <Button
         title="Ride Share"
         onPress={() => this.props.navigation.navigate('RideShare')}
         />
         <Button
         title="Trade and Barter"
         onPress={() => this.props.navigation.navigate('Trade')}
-        />
+        /> */}
       </ScrollView>
     );
   }

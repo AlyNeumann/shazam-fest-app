@@ -6,16 +6,6 @@ import firebase from '../Firebase'
 import { AsyncStorage } from "react-native"
 
 
-// const userId = '8ba790f3-5acd-4a08-bc6a-97a36c124f29';
-// const saveUserId = async userId => {
-//   try {
-//     await AsyncStorage.setItem('userId', userId);
-//   } catch (error) {
-//     // Error retrieving data
-//     console.log(error.message);
-//   }
-// };
-
 
 
 export default class Login extends React.Component {
