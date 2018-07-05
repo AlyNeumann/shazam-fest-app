@@ -1,9 +1,20 @@
 import React from 'react'
 import { View, Text, Button, Alert, Image } from 'react-native';
-import * as firebase from 'firebase'
+// import * as firebase from 'firebase'
 import Expo from 'expo';
-// import Fire from './Fire';
+import firebase from '../Firebase'
+import { AsyncStorage } from "react-native"
 
+
+// const userId = '8ba790f3-5acd-4a08-bc6a-97a36c124f29';
+// const saveUserId = async userId => {
+//   try {
+//     await AsyncStorage.setItem('userId', userId);
+//   } catch (error) {
+//     // Error retrieving data
+//     console.log(error.message);
+//   }
+// };
 
 
 
@@ -16,17 +27,7 @@ export default class Login extends React.Component {
             userGoogle: null
         }
     }
-    componentWillMount() {
-        const config = {
-            apiKey: "AIzaSyDOQ2I8qS3WjiAL7X4nVdgHHK49SyItHMM",
-            authDomain: "shazam-46ae2.firebaseapp.com",
-            databaseURL: "https://shazam-46ae2.firebaseio.com",
-            projectId: "shazam-46ae2",
-            storageBucket: "shazam-46ae2.appspot.com",
-            messagingSenderId: "452468814819"
-        }
-        firebase.initializeApp(config)
-    }
+
 
     async signInWithGoogleAsync() {
         try {
@@ -49,6 +50,7 @@ export default class Login extends React.Component {
                 firebase.auth().signInAndRetrieveDataWithCredential(credential).catch((error) => {
                     console.log(error + "firebase auth faiiiilllll")
                 });
+                this.saveUserName();
 
                 return result.accessToken;
             } else {
@@ -58,6 +60,16 @@ export default class Login extends React.Component {
             return { error: true };
         }
     }
+    
+    saveUserName = async userName => {
+        try {
+            userName = this.state.userGoogle.user.name;
+            await AsyncStorage.setItem('userName', userName);
+        } catch (error) {
+            // Error retrieving data
+            console.log(error.message);
+        }
+    };
 
     _renderUserInfo = () => {
 

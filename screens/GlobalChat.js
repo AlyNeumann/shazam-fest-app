@@ -1,5 +1,6 @@
 import React from 'react'
 import { GiftedChat } from 'react-native-gifted-chat';
+import { AsyncStorage, View, Text } from "react-native"
 
 
 
@@ -8,40 +9,36 @@ export default class GlobalChat extends React.Component {
         super(props);
         this.state = {
             messages: [],
-            userGoogle: null
+            userGoogle: null,
+            userName: null
         };
     }
+    componentWillMount() {
+        this.getUserName();
+        
+    }
+    getUserName= async () => {
+        try {
+            userName = await AsyncStorage.getItem('userName') || 'none';
+        } catch (error) {
+            // Error retrieving data
+            console.log(error.message);
+        }
+        return this.setState({ userName: userName });
+    }
 
-    // componentWillReceiveProps() {
-    //     this.setState({
-    //       userGoogle: //pull this from asyncstorage
-    //     });
-    // }
     render() {
         return (
-            <GiftedChat
-                messages={this.state.messages}
-                // onSend={(message) => {
-                //     Backend.sendMessage(message);
-                // }}
-                // user={{
-                //     _id: this.state.userInfo.id,
-                //     name: this.state.userInfo.name,
-                // }}
-            />
-        );
+            <View>
+                <Text>
+                    Hi {this.state.userName}
+                </Text>
+            </View>
+            //     <GiftedChat
+            //         messages={this.state.messages}
+            //     />
+            // );
+        )
+
     }
-    // componentDidMount() {
-    //     Backend.loadMessages((message) => {
-    //         this.setState((previousState) => {
-    //             return {
-    //                 messages: GiftedChat.append(previousState.messages, message),
-    //             };
-    //         });
-    //     });
-    // }
-    // componentWillUnmount() {
-    //     Backend.closeChat();
-    // }
- 
 }
