@@ -1,6 +1,7 @@
 import React from 'react'
 import { GiftedChat } from 'react-native-gifted-chat';
-import { AsyncStorage, View, Text } from "react-native"
+import { AsyncStorage } from "react-native"
+import Fire from '../Fire';
 
 
 
@@ -9,15 +10,14 @@ export default class GlobalChat extends React.Component {
         super(props);
         this.state = {
             messages: [],
-            userGoogle: null,
             userName: null
         };
     }
     componentWillMount() {
         this.getUserName();
-        
+
     }
-    getUserName= async () => {
+    getUserName = async () => {
         try {
             userName = await AsyncStorage.getItem('userName') || 'none';
         } catch (error) {
@@ -26,19 +26,32 @@ export default class GlobalChat extends React.Component {
         }
         return this.setState({ userName: userName });
     }
+    get user() {
+        return {
+            name: this.state.userName,
+            _id: Fire.shared.uid,
+        };
+    }
 
     render() {
         return (
-            <View>
-                <Text>
-                    Hi {this.state.userName}
-                </Text>
-            </View>
-            //     <GiftedChat
-            //         messages={this.state.messages}
-            //     />
-            // );
-        )
+            <GiftedChat
+                messages={this.state.messages}
+                onSend={Fire.shared.send}
+                user={this.user}
+            />
+        );
+    }
 
+    componentDidMount() {
+        Fire.shared.on(message =>
+            this.setState(previousState => ({
+                messages: GiftedChat.append(previousState.messages, message),
+            }))
+        );
+    }
+    componentWillUnmount() {
+        Fire.shared.off();
     }
 }
+
