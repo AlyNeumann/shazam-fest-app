@@ -1,3 +1,4 @@
+//Back-end for chat
 import firebase from './Firebase'
 
 export default class Fire {

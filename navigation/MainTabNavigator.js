@@ -14,6 +14,7 @@ import Login from '../screens/Login'
 import GlobalChat from '../screens/GlobalChat';
 import RideShare from '../screens/RideShare';
 import Trade from '../screens/Trade';
+import ImageUpload from '../screens/ImageUpload';
 
 const HomeStack = createStackNavigator({
   Login: Login,
@@ -53,6 +54,7 @@ CalenderStack.navigationOptions = {
 
 const GalleryStack = createStackNavigator({
   Gallery: GalleryScreen,
+  ImageUpload: ImageUpload
 });
 
 GalleryStack.navigationOptions = {
